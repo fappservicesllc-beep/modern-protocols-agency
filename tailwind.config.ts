@@ -67,6 +67,14 @@ export default {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        "fade-out": {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
+        "modal-in": {
+          "0%": { opacity: "0", transform: "translateY(14px) scale(0.98)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
@@ -75,6 +83,9 @@ export default {
       animation: {
         "fade-up": "fade-up 0.8s ease-out forwards",
         "fade-in": "fade-in 1s ease-out forwards",
+        "fade-in-fast": "fade-in 0.25s ease-out forwards",
+        "fade-out": "fade-out 0.2s ease-in forwards",
+        "modal-in": "modal-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         shimmer: "shimmer 3s linear infinite",
       },
     },

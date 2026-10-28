@@ -32,6 +32,8 @@
 
   html {
     scroll-behavior: smooth;
+    /* keep anchored sections clear of the fixed announcement bar + nav */
+    scroll-padding-top: calc(var(--announce-h, 44px) + 5rem);
   }
 
   body {

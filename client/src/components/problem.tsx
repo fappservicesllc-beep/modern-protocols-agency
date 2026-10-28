@@ -1,29 +1,16 @@
 import { AlertTriangle, TrendingDown, Clock, EyeOff } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import type { TranslationKey } from "@/lib/translations";
 
-const pains = [
-  {
-    icon: TrendingDown,
-    title: "Revenue plateau",
-    body: "You've hit a ceiling. The growth tactics that took you to $50K/mo are now the same tactics suffocating you at $80K.",
-  },
-  {
-    icon: EyeOff,
-    title: "Brand mismatch",
-    body: "Your offer is premium. Your website looks freelance. Prospects judge you in 7 seconds — and they're judging the wrong thing.",
-  },
-  {
-    icon: Clock,
-    title: "Operator bottleneck",
-    body: "You're still the system. Every content piece, every funnel tweak, every launch waits on you. That's not a business — that's a job.",
-  },
-  {
-    icon: AlertTriangle,
-    title: "Fragmented stack",
-    body: "Five tools, three freelancers, two strategies, zero integration. Nothing compounds because nothing connects.",
-  },
+const pains: { icon: typeof TrendingDown; titleKey: TranslationKey; bodyKey: TranslationKey }[] = [
+  { icon: TrendingDown, titleKey: "problem.1.title", bodyKey: "problem.1.body" },
+  { icon: EyeOff, titleKey: "problem.2.title", bodyKey: "problem.2.body" },
+  { icon: Clock, titleKey: "problem.3.title", bodyKey: "problem.3.body" },
+  { icon: AlertTriangle, titleKey: "problem.4.title", bodyKey: "problem.4.body" },
 ];
 
 export function Problem() {
+  const { t } = useI18n();
   return (
     <section
       id="problem"
@@ -36,19 +23,23 @@ export function Problem() {
           <div className="flex items-center gap-4 mb-6">
             <div className="h-px w-12 bg-gold/50" />
             <span className="text-[11px] tracking-[0.5em] uppercase text-gold font-mono">
-              02 / The Problem
+              {t("problem.label")}
             </span>
           </div>
           <h2
             className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight mb-6"
             data-testid="text-problem-headline"
           >
-            You don't need <span className="gold-text italic">more</span>.<br />
-            You need a <span className="text-foreground">protocol</span>.
+            {t("problem.headline.line1.pre")}
+            <span className="gold-text italic">{t("problem.headline.emphasis")}</span>
+            {t("problem.headline.line1.post")}
+            <br />
+            {t("problem.headline.line2.pre")}
+            <span className="text-foreground">{t("problem.headline.line2.word")}</span>
+            {t("problem.headline.line2.post")}
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
-            Most growth pain isn't a marketing problem. It's a system problem
-            dressed up as one. Here's what we see every week:
+            {t("problem.intro")}
           </p>
         </div>
 
@@ -58,7 +49,7 @@ export function Problem() {
             const Icon = p.icon;
             return (
               <div
-                key={p.title}
+                key={p.titleKey}
                 className={`reveal reveal-delay-${i + 1} premium-card glass-tile rounded-sm p-7 lg:p-8`}
                 data-testid={`pain-card-${i}`}
               >
@@ -68,10 +59,10 @@ export function Problem() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-display text-xl mb-2.5 tracking-tight">
-                      {p.title}
+                      {t(p.titleKey)}
                     </h3>
                     <p className="text-muted-foreground leading-relaxed">
-                      {p.body}
+                      {t(p.bodyKey)}
                     </p>
                   </div>
                 </div>

@@ -1,14 +1,11 @@
-import express from "express";
 import http from "http";
-import { registerRoutes } from "./routes";
+import { createApp } from "./app";
 import { setupVite, serveStatic } from "./vite";
 
-const app = express();
-app.use(express.json({ limit: "1mb" }));
+const app = createApp();
 
 const server = http.createServer(app);
 
-registerRoutes(app);
 
 const isProd = process.env.NODE_ENV === "production";
 
