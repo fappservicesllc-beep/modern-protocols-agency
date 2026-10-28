@@ -1,8 +1,14 @@
 import type { Express, Request, Response } from "express";
 import { Resend } from "resend";
 import { storage } from "./storage";
-import { insertInquirySchema, type Inquiry } from "@shared/schema";
+import {
+  insertInquirySchema,
+  insertSubscriberSchema,
+  type Inquiry,
+  type Subscriber,
+} from "@shared/schema";
 import { ZodError } from "zod";
+import { requireAdmin } from "./auth";
 
 const INQUIRY_RECIPIENT = "themodernprotocols@gmail.com";
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -60,6 +66,50 @@ async function sendInquiryEmail(inquiry: Inquiry) {
   });
 }
 
+async function sendSubscriberEmail(sub: Subscriber) {
+  if (!resend) {
+    console.warn("[subscribers] RESEND_API_KEY not set — skipping email");
+    return;
+  }
+  const rows: Array<[string, string]> = [
+    ["First Name", sub.firstName],
+    ["Email", sub.email],
+    ["Business Type", sub.businessType],
+    [
+      "Subscribed",
+      new Date(sub.createdAt).toLocaleString("en-US", { timeZone: "America/New_York" }) + " ET",
+    ],
+  ];
+  const html = `
+    <div style="font-family: Georgia, 'Times New Roman', serif; color:#0a0a0a; max-width:600px; margin:0 auto; padding:32px; background:#f5f5f0;">
+      <div style="border-top:1px solid #c9a961; border-bottom:1px solid #c9a961; padding:24px 0; margin-bottom:24px;">
+        <div style="font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:#c9a961; margin-bottom:8px;">The Modern Protocols Weekly</div>
+        <div style="font-size:24px; font-weight:300;">New Subscriber</div>
+      </div>
+      <table style="width:100%; border-collapse:collapse;">
+        ${rows
+          .map(
+            ([label, value]) => `
+          <tr>
+            <td style="padding:12px 0; border-bottom:1px solid #e5e5e0; vertical-align:top; width:140px; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#c9a961;">${escapeHtml(label)}</td>
+            <td style="padding:12px 0; border-bottom:1px solid #e5e5e0; font-size:14px; line-height:1.6; color:#0a0a0a;">${escapeHtml(value)}</td>
+          </tr>`,
+          )
+          .join("")}
+      </table>
+    </div>
+  `;
+  const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
+  await resend.emails.send({
+    from: "The Modern Protocols <onboarding@resend.dev>",
+    to: INQUIRY_RECIPIENT,
+    replyTo: sub.email,
+    subject: `New Weekly Subscriber — ${sub.firstName} (${sub.businessType})`,
+    html,
+    text,
+  });
+}
+
 export function registerRoutes(app: Express) {
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok" });
@@ -84,7 +134,36 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  app.get("/api/inquiries", async (_req, res) => {
+  app.post("/api/subscribers", async (req: Request, res: Response) => {
+    try {
+      const parsed = insertSubscriberSchema.parse(req.body);
+      const sub = await storage.createSubscriber(parsed);
+      try {
+        await sendSubscriberEmail(sub);
+      } catch (mailErr) {
+        console.error("[subscribers] email send failed:", mailErr);
+      }
+      res.status(201).json(sub);
+    } catch (err) {
+      if (err instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: err.flatten() });
+      }
+      console.error("[subscribers] error:", err);
+      res.status(500).json({ error: "Failed to subscribe" });
+    }
+  });
+
+  app.get("/api/subscribers", requireAdmin, async (_req, res) => {
+    try {
+      const all = await storage.listSubscribers();
+      res.json(all);
+    } catch (err) {
+      console.error("[subscribers] list error:", err);
+      res.status(500).json({ error: "Failed to list subscribers" });
+    }
+  });
+
+  app.get("/api/inquiries", requireAdmin, async (_req, res) => {
     try {
       const all = await storage.listInquiries();
       res.json(all);

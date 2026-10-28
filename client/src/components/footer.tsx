@@ -1,6 +1,27 @@
 import { Instagram, Linkedin, Twitter } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import type { TranslationKey } from "@/lib/translations";
+
+const NAV_LINKS: { href: string; key: TranslationKey; testId: string }[] = [
+  { href: "#services", key: "footer.nav.services", testId: "services" },
+  { href: "#methodology", key: "footer.nav.method", testId: "method" },
+  { href: "#results", key: "footer.nav.results", testId: "results" },
+  { href: "#faq", key: "footer.nav.faq", testId: "faq" },
+  { href: "#contact", key: "footer.nav.contact", testId: "contact" },
+];
+
+const SERVICE_KEYS: TranslationKey[] = [
+  "services.1.title",
+  "services.2.title",
+  "services.3.title",
+  "services.4.title",
+  "services.5.title",
+  "services.6.title",
+  "services.7.title",
+];
 
 export function Footer() {
+  const { t } = useI18n();
   return (
     <footer
       className="relative pt-20 pb-12 border-t border-border/60 bg-card/30"
@@ -25,8 +46,7 @@ export function Footer() {
               </div>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mb-6">
-              A digital growth studio building the systems modern brands use to
-              compound their advantage.
+              {t("footer.tagline")}
             </p>
             <div className="flex items-center gap-3">
               <a

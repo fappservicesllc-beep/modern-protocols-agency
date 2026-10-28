@@ -17,3 +17,9 @@ export function getDb() {
   }
   return _db;
 }
+
+export async function closeDb() {
+  await _pool?.end();
+  _pool = null;
+  _db = null;
+}

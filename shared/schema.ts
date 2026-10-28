@@ -24,3 +24,20 @@ export const insertInquirySchema = createInsertSchema(inquiries, {
 
 export type InsertInquiry = z.infer<typeof insertInquirySchema>;
 export type Inquiry = typeof inquiries.$inferSelect;
+
+export const subscribers = pgTable("subscribers", {
+  id: serial("id").primaryKey(),
+  firstName: text("first_name").notNull(),
+  email: text("email").notNull().unique(),
+  businessType: text("business_type").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSubscriberSchema = createInsertSchema(subscribers, {
+  firstName: z.string().min(2, "Name is required"),
+  email: z.string().email("Valid email required"),
+  businessType: z.string().min(1, "Select your business type"),
+}).omit({ id: true, createdAt: true });
+
+export type InsertSubscriber = z.infer<typeof insertSubscriberSchema>;
+export type Subscriber = typeof subscribers.$inferSelect;
