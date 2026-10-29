@@ -20,5 +20,5 @@
       "@shared/*": ["shared/*"]
     }
   },
-  "include": ["client/src", "server", "shared", "vite.config.ts", "drizzle.config.ts"]
+  "include": ["client/src", "server", "shared", "db", "netlify/functions", "vite.config.ts", "drizzle.config.ts"]
 }
