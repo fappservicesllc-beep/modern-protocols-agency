@@ -1,20 +1,27 @@
-import { useState, type FormEvent } from "react";
-import { apiRequest } from "@/lib/queryClient";
 import { Instagram, Linkedin, Twitter } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import type { TranslationKey } from "@/lib/translations";
+
+const NAV_LINKS: { href: string; key: TranslationKey; testId: string }[] = [
+  { href: "#services", key: "footer.nav.services", testId: "services" },
+  { href: "#methodology", key: "footer.nav.method", testId: "method" },
+  { href: "#results", key: "footer.nav.results", testId: "results" },
+  { href: "#faq", key: "footer.nav.faq", testId: "faq" },
+  { href: "#contact", key: "footer.nav.contact", testId: "contact" },
+];
+
+const SERVICE_KEYS: TranslationKey[] = [
+  "services.1.title",
+  "services.2.title",
+  "services.3.title",
+  "services.4.title",
+  "services.5.title",
+  "services.6.title",
+  "services.7.title",
+];
 
 export function Footer() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
-  async function subscribe(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus("saving");
-    try {
-      await apiRequest("/api/newsletter", { method: "POST", body: JSON.stringify({ email }) });
-      setEmail("");
-      setStatus("saved");
-    } catch { setStatus("error"); }
-  }
-
+  const { t } = useI18n();
   return (
     <footer
       className="relative pt-20 pb-12 border-t border-border/60 bg-card/30"
@@ -39,8 +46,7 @@ export function Footer() {
               </div>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mb-6">
-              A digital growth studio building the systems modern brands use to
-              compound their advantage.
+              {t("footer.tagline")}
             </p>
             <div className="flex items-center gap-3">
               <a
@@ -104,15 +110,6 @@ export function Footer() {
             </ul>
           </div>
         </div>
-
-        <form onSubmit={subscribe} className="mb-12 max-w-lg" aria-label="Newsletter signup">
-          <label htmlFor="newsletter-email" className="block text-[10px] tracking-[0.3em] uppercase text-gold font-mono mb-4">The Modern Protocols newsletter</label>
-          <div className="flex gap-3">
-            <input id="newsletter-email" type="email" name="email" autoComplete="email" required maxLength={320} value={email} onChange={event => { setEmail(event.target.value); setStatus("idle"); }} placeholder="Your email address" className="min-w-0 flex-1 bg-input/60 border border-border rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-gold" />
-            <button type="submit" disabled={status === "saving"} className="border border-gold/60 text-gold rounded-sm px-5 py-3 text-sm hover:bg-gold/10 focus-visible:outline focus-visible:outline-gold disabled:opacity-60">{status === "saving" ? "Subscribing…" : "Subscribe"}</button>
-          </div>
-          <p role="status" className="mt-3 text-sm text-muted-foreground">{status === "saved" ? "You’re subscribed. Thank you." : status === "error" ? "Could not subscribe. Please try again." : "Receive news and insights by email."}</p>
-        </form>
 
         <div className="gold-hairline h-px w-full mb-8" />
 

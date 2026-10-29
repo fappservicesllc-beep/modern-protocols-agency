@@ -3,7 +3,7 @@ import { handleSubmissions } from "./submissions.js";
 
 export function registerRoutes(app: Express) {
   app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
-  app.all(["/api/inquiries", "/api/newsletter"], async (req, res) => {
+  app.all(["/api/inquiries", "/api/subscribers", "/api/newsletter"], async (req, res) => {
     const headers = new Headers();
     if (req.headers.authorization) headers.set("authorization", req.headers.authorization);
     headers.set("content-type", "application/json");

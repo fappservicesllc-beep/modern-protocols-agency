@@ -1,4 +1,7 @@
+import { useI18n } from "@/lib/i18n";
+
 export function About() {
+  const { t } = useI18n();
   return (
     <section
       id="about"
@@ -26,35 +29,20 @@ export function About() {
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-gold/50" />
               <span className="text-[11px] tracking-[0.5em] uppercase text-gold font-mono">
-                The Studio
+                {t("about.label")}
               </span>
             </div>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.05] mb-8">
-              We're the key
+              {t("about.headline.line1")}
               <br />
-              <span className="gold-text italic">to modern growth.</span>
+              <span className="gold-text italic">{t("about.headline.emphasis")}</span>
             </h2>
             <div className="space-y-6 text-muted-foreground text-base md:text-lg leading-relaxed">
-              <p>
-                The Modern Protocols is a private digital studio for brands that
-                refuse to be average. We don't sell templates, we don't run
-                playbooks — we build custom growth protocols for ambitious
-                founders and operators.
-              </p>
-              <p>
-                From a luxury fashion launch to a SaaS scaling its first million,
-                our work sits at the intersection of timeless craft and modern
-                technology. AI is a tool. Design is a language. Community is the
-                compound interest.
-              </p>
-              <p>
-                We also build digital products — tools, templates, and systems
-                designed to simplify daily rituals and elevate the lifestyles of
-                the people who use them. Growth for our clients, utility for
-                their customers.
-              </p>
+              <p>{t("about.p1")}</p>
+              <p>{t("about.p2")}</p>
+              <p>{t("about.p3")}</p>
               <p className="text-foreground/90 font-display italic text-xl md:text-2xl pt-4 border-l-2 border-gold/60 pl-6">
-                "The key unlocks. The protocols compound."
+                {t("about.quote")}
               </p>
             </div>
 
@@ -62,19 +50,19 @@ export function About() {
               <div>
                 <div className="font-display text-3xl gold-text mb-1">2021</div>
                 <div className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground font-mono">
-                  Founded
+                  {t("about.stat1.label")}
                 </div>
               </div>
               <div>
                 <div className="font-display text-3xl gold-text mb-1">14</div>
                 <div className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground font-mono">
-                  Team
+                  {t("about.stat2.label")}
                 </div>
               </div>
               <div>
                 <div className="font-display text-3xl gold-text mb-1">3</div>
                 <div className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground font-mono">
-                  Continents
+                  {t("about.stat3.label")}
                 </div>
               </div>
             </div>

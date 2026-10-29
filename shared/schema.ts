@@ -1,6 +1,6 @@
-import { inquiries } from "../db/schema.js";
+import { inquiries, subscribers } from "../db/schema.js";
 import { z } from "zod";
-export { inquiries, newsletterSubscribers } from "../db/schema.js";
+export { inquiries, newsletterSubscribers, subscribers } from "../db/schema.js";
 
 export const insertInquirySchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -15,3 +15,11 @@ export type InsertInquiry = z.infer<typeof insertInquirySchema>;
 export type Inquiry = typeof inquiries.$inferSelect;
 
 export const insertNewsletterSchema = z.object({ email: z.string().trim().email().max(320).transform(value => value.toLowerCase()) });
+
+export const insertSubscriberSchema = z.object({
+  firstName: z.string().min(2, "Name is required"),
+  email: z.string().email("Valid email required"),
+  businessType: z.string().min(1, "Select your business type"),
+});
+export type InsertSubscriber = z.infer<typeof insertSubscriberSchema>;
+export type Subscriber = typeof subscribers.$inferSelect;

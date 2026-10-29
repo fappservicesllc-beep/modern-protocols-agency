@@ -1,53 +1,66 @@
 import { ArrowUpRight } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import type { TranslationKey } from "@/lib/translations";
 
-const CASES = [
+type Case = {
+  clientKey?: TranslationKey; // for placeholder — brand names stay literal for real clients
+  client?: string;
+  categoryKey: TranslationKey;
+  headlineKey: TranslationKey;
+  metricKey: TranslationKey;
+  durationKey: TranslationKey;
+  href: string;
+  color: string;
+  image?: string;
+  imageContain?: boolean;
+  placeholder?: boolean;
+};
+
+const CASES: Case[] = [
   {
     client: "Erwin Pérez Media",
-    category: "Public Relations · Miami",
-    headline:
-      "Positioned a top PR strategist and El Nuevo Herald journalist as the bridge between brands and Miami's leading media.",
-    metric: "Miami → LATAM",
-    duration: "Ongoing",
+    categoryKey: "work.1.category",
+    headlineKey: "work.1.headline",
+    metricKey: "work.1.metric",
+    durationKey: "work.1.duration",
     href: "https://www.erwinperezmedia.com",
     color: "from-amber-900/30 to-amber-700/10",
     image: "/erwin-perez.png",
   },
   {
     client: "The Little Seamstress",
-    category: "Bridal Atelier · Couture",
-    headline:
-      "Crafted a refined digital home for a bespoke bridal atelier — showcasing the artistry behind every custom gown and alteration.",
-    metric: "Bookings ↑",
-    duration: "Ongoing",
+    categoryKey: "work.2.category",
+    headlineKey: "work.2.headline",
+    metricKey: "work.2.metric",
+    durationKey: "work.2.duration",
     href: "https://www.thelittleseamstress.com",
     color: "from-stone-800/40 to-amber-900/10",
     image: "/work/little-seamstress.png",
   },
   {
     client: "Sexo Sentido",
-    category: "Lifestyle · Editorial",
-    headline:
-      "Instagram image direction and social strategy shaping an intimate, modern voice that resonates.",
-    metric: "Engagement ↑",
-    duration: "Ongoing",
+    categoryKey: "work.3.category",
+    headlineKey: "work.3.headline",
+    metricKey: "work.3.metric",
+    durationKey: "work.3.duration",
     href: "https://sexosentido.us",
     image: "/sexo-sentido.jpg",
     color: "from-rose-950/40 to-amber-900/10",
   },
   {
     placeholder: true,
-    client: "YOUR BRAND HERE",
-    category: "New Partnership",
-    headline:
-      "We're looking for the next game-changer. If you're ready to scale your digital presence and dominate your niche, this spot is reserved for you.",
-    metric: "1 Spot Left",
-    duration: "Q3/Q4 Intake",
+    clientKey: "work.placeholder.brand",
+    categoryKey: "work.placeholder.category",
+    headlineKey: "work.placeholder.headline",
+    metricKey: "work.placeholder.metric",
+    durationKey: "work.placeholder.duration",
     href: "#contact",
     color: "from-amber-950/30 to-background",
   },
 ];
 
 export function Work() {
+  const { t } = useI18n();
   return (
     <section
       id="work"
@@ -60,11 +73,11 @@ export function Work() {
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-gold/50" />
               <span className="text-[11px] tracking-[0.5em] uppercase text-gold font-mono">
-                Selected Roster
+                {t("work.label")}
               </span>
             </div>
             <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05]">
-              Brands we've <span className="gold-text italic">unlocked.</span>
+              {t("work.headline.pre")}<span className="gold-text italic">{t("work.headline.emphasis")}</span>
             </h2>
           </div>
           <a
@@ -72,14 +85,14 @@ export function Work() {
             className="text-xs tracking-[0.25em] uppercase text-gold hover:text-gold-bright transition-colors inline-flex items-center gap-2"
             data-testid="link-discuss-yours"
           >
-            Discuss yours <ArrowUpRight className="h-4 w-4" />
+            {t("work.discuss")} <ArrowUpRight className="h-4 w-4" />
           </a>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {CASES.map((c, i) => (
             <article
-              key={c.client}
+              key={c.client ?? String(i)}
               onClick={() => {
                 if (c.placeholder) {
                   document
@@ -153,7 +166,7 @@ export function Work() {
                         </span>
                       )}
                       <div className="text-[10px] tracking-[0.3em] uppercase text-gold/80 font-mono">
-                        {c.category}
+                        {t(c.categoryKey)}
                       </div>
                     </div>
                     <h3
@@ -163,7 +176,7 @@ export function Work() {
                           : "font-display text-3xl md:text-4xl tracking-tight"
                       }
                     >
-                      {c.client}
+                      {c.clientKey ? t(c.clientKey) : c.client}
                     </h3>
                   </div>
                   <div
@@ -185,7 +198,7 @@ export function Work() {
                         : "text-foreground/90 text-base md:text-lg leading-snug mb-6 max-w-md"
                     }
                   >
-                    {c.headline}
+                    {t(c.headlineKey)}
                   </p>
                   <div
                     className={`flex items-center gap-6 pt-6 ${
@@ -202,11 +215,11 @@ export function Work() {
                             : "font-display text-2xl gold-text leading-none"
                         }
                       >
-                        {c.metric}
+                        {t(c.metricKey)}
                       </div>
                       {!c.placeholder && (
                         <div className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground font-mono mt-1">
-                          Outcome
+                          {t("work.outcome")}
                         </div>
                       )}
                     </div>
@@ -219,11 +232,11 @@ export function Work() {
                             : "font-display text-2xl text-foreground leading-none"
                         }
                       >
-                        {c.duration}
+                        {t(c.durationKey)}
                       </div>
                       {!c.placeholder && (
                         <div className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground font-mono mt-1">
-                          Engagement
+                          {t("work.engagement")}
                         </div>
                       )}
                     </div>

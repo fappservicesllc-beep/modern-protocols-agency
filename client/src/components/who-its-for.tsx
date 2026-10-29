@@ -1,20 +1,23 @@
 import { Check, X } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import type { TranslationKey } from "@/lib/translations";
 
-const fits = [
-  "Founders running $50K–$500K/month who've outgrown freelance help",
-  "Personal brands & operators with audience but unmonetized attention",
-  "E-commerce & DTC scaling past their first plateau",
-  "Service businesses ready to productize and systemize",
+const fits: TranslationKey[] = [
+  "who.fit.1",
+  "who.fit.2",
+  "who.fit.3",
+  "who.fit.4",
 ];
 
-const notFits = [
-  "Pre-revenue, idea-stage projects",
-  "Looking for cheapest quote — we are not it",
-  "Want a logo and a one-page site, nothing else",
-  "Unwilling to commit 4 hours/week for 90 days",
+const notFits: TranslationKey[] = [
+  "who.notfit.1",
+  "who.notfit.2",
+  "who.notfit.3",
+  "who.notfit.4",
 ];
 
 export function WhoItsFor() {
+  const { t } = useI18n();
   return (
     <section
       id="who-its-for"
@@ -29,16 +32,16 @@ export function WhoItsFor() {
           <div className="flex items-center gap-4 mb-6">
             <div className="h-px w-12 bg-gold/50" />
             <span className="text-[11px] tracking-[0.5em] uppercase text-gold font-mono">
-              01 / Who It's For
+              {t("who.label")}
             </span>
           </div>
           <h2
             className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight"
             data-testid="text-who-headline"
           >
-            We don't work with{" "}
-            <span className="gold-text italic">everyone</span>.<br />
-            And that's why our clients win.
+            {t("who.headline.pre")}
+            <span className="gold-text italic">{t("who.headline.emphasis")}</span>
+            {t("who.headline.post")}
           </h2>
         </div>
 
@@ -51,18 +54,18 @@ export function WhoItsFor() {
                 <Check className="h-4 w-4 text-gold" />
               </span>
               <span className="text-[11px] tracking-[0.4em] uppercase font-mono text-gold">
-                You're a fit if
+                {t("who.fit.label")}
               </span>
             </div>
             <ul className="space-y-4">
-              {fits.map((f, i) => (
+              {fits.map((k, i) => (
                 <li
-                  key={i}
+                  key={k}
                   className="flex items-start gap-3 text-foreground/90"
                   data-testid={`fit-item-${i}`}
                 >
                   <span className="inline-block w-1 h-1 rounded-full bg-gold mt-2.5 flex-shrink-0" />
-                  <span className="leading-relaxed">{f}</span>
+                  <span className="leading-relaxed">{t(k)}</span>
                 </li>
               ))}
             </ul>
@@ -75,18 +78,18 @@ export function WhoItsFor() {
                 <X className="h-4 w-4 text-muted-foreground" />
               </span>
               <span className="text-[11px] tracking-[0.4em] uppercase font-mono text-muted-foreground">
-                Skip us if
+                {t("who.notfit.label")}
               </span>
             </div>
             <ul className="space-y-4">
-              {notFits.map((f, i) => (
+              {notFits.map((k, i) => (
                 <li
-                  key={i}
+                  key={k}
                   className="flex items-start gap-3 text-muted-foreground"
                   data-testid={`notfit-item-${i}`}
                 >
                   <span className="inline-block w-1 h-1 rounded-full bg-muted-foreground/40 mt-2.5 flex-shrink-0" />
-                  <span className="leading-relaxed">{f}</span>
+                  <span className="leading-relaxed">{t(k)}</span>
                 </li>
               ))}
             </ul>

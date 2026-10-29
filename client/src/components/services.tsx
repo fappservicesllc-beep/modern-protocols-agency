@@ -8,75 +8,30 @@ import {
   Crown,
   Package,
 } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import type { TranslationKey } from "@/lib/translations";
 
-const SERVICES = [
-  {
-    icon: Globe2,
-    title: "Website Creation",
-    description:
-      "Custom-coded, conversion-engineered websites that reflect the caliber of your brand and load like a luxury suite.",
-    deliverables: ["Bespoke design", "Performance-tuned build", "Conversion architecture"],
-    code: "01",
-  },
-  {
-    icon: Crown,
-    title: "Brand Elevation",
-    description:
-      "We refine how your brand looks, sounds, and feels online — so every touchpoint reads like the category leader.",
-    deliverables: ["Visual identity", "Voice & messaging", "Digital presence audit"],
-    code: "02",
-  },
-  {
-    icon: TrendingUp,
-    title: "Sales & Traffic Growth",
-    description:
-      "Funnels, paid acquisition, and conversion systems that compound traffic into revenue, not just impressions.",
-    deliverables: ["Paid media strategy", "Funnel engineering", "Analytics & attribution"],
-    code: "03",
-  },
-  {
-    icon: Clapperboard,
-    title: "AI Video Sales Letters",
-    description:
-      "Long-form VSLs produced with AI workflows — scripted to convert, edited for retention, deployed at scale.",
-    deliverables: ["AI-assisted scripting", "Voice & avatar production", "Conversion-tested edits"],
-    code: "04",
-  },
-  {
-    icon: Users,
-    title: "UGC Production",
-    description:
-      "A roster of creators producing native, scroll-stopping content built for ads, organic, and everything between.",
-    deliverables: ["Creator sourcing", "Briefing & direction", "Ad-ready deliverables"],
-    code: "05",
-  },
-  {
-    icon: Sparkles,
-    title: "Community Management",
-    description:
-      "We run the rooms where your audience lives — replies, retention, and rituals that build a real community.",
-    deliverables: ["Daily moderation", "Engagement frameworks", "Loyalty programs"],
-    code: "06",
-  },
-  {
-    icon: Megaphone,
-    title: "Brand Exposure",
-    description:
-      "Press, partnerships, podcasts, and placements that put your brand in the rooms it deserves to be in.",
-    deliverables: ["PR & placements", "Strategic partnerships", "Influencer alignment"],
-    code: "07",
-  },
-  {
-    icon: Package,
-    title: "Digital Products",
-    description:
-      "We design and ship digital products — tools, templates, and systems — that simplify daily rituals and elevate the lifestyles of those who use them.",
-    deliverables: ["Product design & build", "Lifestyle-led UX", "Launch & distribution"],
-    code: "08",
-  },
+type Service = {
+  icon: typeof Globe2;
+  titleKey: TranslationKey;
+  descKey: TranslationKey;
+  deliverables: TranslationKey[];
+  code: string;
+};
+
+const SERVICES: Service[] = [
+  { icon: Globe2, titleKey: "services.1.title", descKey: "services.1.description", deliverables: ["services.1.d1", "services.1.d2", "services.1.d3"], code: "01" },
+  { icon: Crown, titleKey: "services.2.title", descKey: "services.2.description", deliverables: ["services.2.d1", "services.2.d2", "services.2.d3"], code: "02" },
+  { icon: TrendingUp, titleKey: "services.3.title", descKey: "services.3.description", deliverables: ["services.3.d1", "services.3.d2", "services.3.d3"], code: "03" },
+  { icon: Clapperboard, titleKey: "services.4.title", descKey: "services.4.description", deliverables: ["services.4.d1", "services.4.d2", "services.4.d3"], code: "04" },
+  { icon: Users, titleKey: "services.5.title", descKey: "services.5.description", deliverables: ["services.5.d1", "services.5.d2", "services.5.d3"], code: "05" },
+  { icon: Sparkles, titleKey: "services.6.title", descKey: "services.6.description", deliverables: ["services.6.d1", "services.6.d2", "services.6.d3"], code: "06" },
+  { icon: Megaphone, titleKey: "services.7.title", descKey: "services.7.description", deliverables: ["services.7.d1", "services.7.d2", "services.7.d3"], code: "07" },
+  { icon: Package, titleKey: "services.8.title", descKey: "services.8.description", deliverables: ["services.8.d1", "services.8.d2", "services.8.d3"], code: "08" },
 ];
 
 export function Services() {
+  const { t } = useI18n();
   return (
     <section
       id="services"
@@ -89,18 +44,16 @@ export function Services() {
           <div className="flex items-center gap-4 mb-6">
             <div className="h-px w-12 bg-gold/50" />
             <span className="text-[11px] tracking-[0.5em] uppercase text-gold font-mono">
-              05 / The Arsenal
+              {t("services.label")}
             </span>
           </div>
           <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05] mb-6">
-            Eight protocols.
+            {t("services.headline.line1")}
             <br />
-            <span className="gold-text italic">One unified system.</span>
+            <span className="gold-text italic">{t("services.headline.line2")}</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Inside the 90-Day Protocol, your engagement is composed from these
-            eight disciplines — selected and sequenced around the specific
-            outcome you're scaling toward.
+            {t("services.intro")}
           </p>
         </div>
 
@@ -110,7 +63,7 @@ export function Services() {
             const Icon = s.icon;
             return (
               <div
-                key={s.title}
+                key={s.code}
                 className="group relative bg-background p-8 md:p-10 hover-elevate transition-colors reveal"
                 data-testid={`card-service-${s.code}`}
               >
@@ -123,10 +76,10 @@ export function Services() {
                   </span>
                 </div>
                 <h3 className="font-display text-2xl md:text-3xl mb-4 tracking-tight">
-                  {s.title}
+                  {t(s.titleKey)}
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                  {s.description}
+                  {t(s.descKey)}
                 </p>
                 <ul className="space-y-2">
                   {s.deliverables.map((d) => (
@@ -135,7 +88,7 @@ export function Services() {
                       className="flex items-center gap-3 text-xs text-foreground/70 tracking-wide"
                     >
                       <span className="h-px w-4 bg-gold/60" />
-                      {d}
+                      {t(d)}
                     </li>
                   ))}
                 </ul>
@@ -146,18 +99,18 @@ export function Services() {
           <div className="hidden lg:block bg-background p-8 md:p-10 reveal">
             <div className="h-full flex flex-col justify-between">
               <div className="text-[10px] tracking-[0.3em] uppercase text-gold/70 font-mono">
-                Custom Protocol
+                {t("services.custom.label")}
               </div>
               <div>
                 <h3 className="font-display text-2xl md:text-3xl mb-4 tracking-tight">
-                  Need something specific?
+                  {t("services.custom.title")}
                 </h3>
                 <a
                   href="#contact"
                   className="inline-flex items-center gap-2 text-xs tracking-[0.25em] uppercase text-gold hover:text-gold-bright transition-colors"
                   data-testid="link-custom-protocol"
                 >
-                  Build a Custom Plan →
+                  {t("services.custom.cta")}
                 </a>
               </div>
             </div>

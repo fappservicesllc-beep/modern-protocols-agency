@@ -16,3 +16,11 @@ export const newsletterSubscribers = pgTable("newsletter_subscribers", {
   email: text("email").notNull().unique(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
+
+export const subscribers = pgTable("subscribers", {
+  id: serial("id").primaryKey(),
+  firstName: text("first_name").notNull(),
+  email: text("email").notNull().unique(),
+  businessType: text("business_type").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
