@@ -1,5 +1,6 @@
 import { getDb } from "./db";
-import { inquiries, type InsertInquiry, type Inquiry } from "@shared/schema";
+import type { InsertInquiry, Inquiry } from "@shared/schema";
+import { inquiries } from "../db/schema.js";
 import { desc } from "drizzle-orm";
 
 export const storage = {

@@ -1,6 +1,5 @@
-import { inquiries, subscribers } from "../db/schema.js";
+import type { inquiries, subscribers } from "../db/schema.js";
 import { z } from "zod";
-export { inquiries, newsletterSubscribers, subscribers } from "../db/schema.js";
 
 export const insertInquirySchema = z.object({
   name: z.string().min(2, "Name is required"),
