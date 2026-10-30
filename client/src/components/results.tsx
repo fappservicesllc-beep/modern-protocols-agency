@@ -3,52 +3,63 @@
  * Numbers are placeholders flagged with the indicator dot. Real metrics
  * land here once the client confirms them.
  */
-const studies = [
+import { useI18n } from "@/lib/i18n";
+import type { TranslationKey } from "@/lib/translations";
+
+type Study = {
+  brand: string;
+  person: string;
+  href: string;
+  metric: string;
+  categoryKey: TranslationKey;
+  contextKey: TranslationKey;
+  metricLabelKey: TranslationKey;
+  subKey: TranslationKey;
+  quoteKey: TranslationKey;
+  roleKey: TranslationKey;
+};
+
+const studies: Study[] = [
   {
     brand: "Erwin Pérez Media",
-    category: "Public Relations · Miami",
-    href: "https://www.erwinperezmedia.com",
-    context:
-      "A top PR strategist with the relationships, but a digital presence that didn't reflect the caliber of his roster.",
-    metric: "3.4×",
-    metricLabel: "Inbound media inquiries",
-    sub: "First 60 days post-launch",
-    quote:
-      "They didn't sell us a website. They rebuilt how prospects perceive the brand. The inbound speaks for itself.",
     person: "Erwin Pérez",
-    role: "Founder",
+    href: "https://www.erwinperezmedia.com",
+    metric: "3.4×",
+    categoryKey: "results.1.category",
+    contextKey: "results.1.context",
+    metricLabelKey: "results.1.metricLabel",
+    subKey: "results.1.sub",
+    quoteKey: "results.1.quote",
+    roleKey: "results.1.role",
   },
   {
     brand: "The Little Seamstress",
-    category: "Bridal Atelier · Couture",
-    href: "https://www.thelittleseamstress.com",
-    context:
-      "A bespoke bridal atelier with extraordinary craft, hidden behind a forgettable website. Brides found her by word-of-mouth — and only that.",
-    metric: "+218%",
-    metricLabel: "Qualified bridal bookings",
-    sub: "Quarter-over-quarter",
-    quote:
-      "Brides arrive already in love with the work. The site does the selling now — I do the sewing.",
     person: "The Little Seamstress",
-    role: "Founder & Lead Couturier",
+    href: "https://www.thelittleseamstress.com",
+    metric: "+218%",
+    categoryKey: "results.2.category",
+    contextKey: "results.2.context",
+    metricLabelKey: "results.2.metricLabel",
+    subKey: "results.2.sub",
+    quoteKey: "results.2.quote",
+    roleKey: "results.2.role",
   },
   {
     brand: "Sexo Sentido",
-    category: "Lifestyle · Editorial",
-    href: "https://sexosentido.us",
-    context:
-      "An editorial lifestyle brand with a bold voice but inconsistent visual identity across Instagram and beyond.",
-    metric: "+412%",
-    metricLabel: "Engagement rate",
-    sub: "90-day content protocol",
-    quote:
-      "Our feed finally feels like the brand we always knew we were. Everything compounds now.",
     person: "Sexo Sentido",
-    role: "Editorial Team",
+    href: "https://sexosentido.us",
+    metric: "+412%",
+    categoryKey: "results.3.category",
+    contextKey: "results.3.context",
+    metricLabelKey: "results.3.metricLabel",
+    subKey: "results.3.sub",
+    quoteKey: "results.3.quote",
+    roleKey: "results.3.role",
   },
 ];
 
 export function Results() {
+  const { t } = useI18n();
   return (
     <section
       id="results"
@@ -61,19 +72,19 @@ export function Results() {
           <div className="flex items-center gap-4 mb-6">
             <div className="h-px w-12 bg-gold/50" />
             <span className="text-[11px] tracking-[0.5em] uppercase text-gold font-mono">
-              04 / Results
+              {t("results.label")}
             </span>
           </div>
           <h2
             className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight mb-6"
             data-testid="text-results-headline"
           >
-            The math of a{" "}
-            <span className="gold-text italic">working protocol</span>.
+            {t("results.headline.pre")}
+            <span className="gold-text italic">{t("results.headline.emphasis")}</span>
+            {t("results.headline.post")}
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
-            Three operators. Three categories. One framework. Real outcomes
-            from inside the last twelve months of the studio.
+            {t("results.intro")}
           </p>
         </div>
 
@@ -92,18 +103,18 @@ export function Results() {
               <div>
                 <div className="flex items-center gap-3 mb-3">
                   <span className="text-[10px] tracking-[0.3em] uppercase font-mono text-gold">
-                    Case · 0{i + 1}
+                    {t("results.case")} · 0{i + 1}
                   </span>
                   <span className="text-muted-foreground/40">·</span>
                   <span className="text-[10px] tracking-[0.3em] uppercase font-mono text-muted-foreground">
-                    {s.category}
+                    {t(s.categoryKey)}
                   </span>
                 </div>
                 <h3 className="font-display text-2xl lg:text-3xl mb-3 tracking-tight">
                   {s.brand}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
-                  {s.context}
+                  {t(s.contextKey)}
                 </p>
               </div>
 
@@ -113,22 +124,22 @@ export function Results() {
                   {s.metric}
                 </div>
                 <div className="text-[10px] tracking-[0.3em] uppercase font-mono text-foreground mb-1">
-                  {s.metricLabel}
+                  {t(s.metricLabelKey)}
                 </div>
                 <div className="text-[10px] tracking-[0.2em] uppercase font-mono text-muted-foreground">
-                  {s.sub}
+                  {t(s.subKey)}
                 </div>
               </div>
 
               {/* Testimonial */}
               <div>
                 <p className="text-foreground/90 italic leading-relaxed mb-4 text-base lg:text-lg">
-                  "{s.quote}"
+                  "{t(s.quoteKey)}"
                 </p>
                 <div className="flex items-baseline gap-3 text-[10px] tracking-[0.3em] uppercase font-mono">
                   <span className="text-gold">— {s.person}</span>
                   <span className="text-muted-foreground/40">·</span>
-                  <span className="text-muted-foreground">{s.role}</span>
+                  <span className="text-muted-foreground">{t(s.roleKey)}</span>
                 </div>
               </div>
             </a>
@@ -137,7 +148,7 @@ export function Results() {
 
         {/* Footnote */}
         <p className="text-[10px] tracking-[0.2em] uppercase font-mono text-muted-foreground/60 mt-10 text-center reveal">
-          Metrics reflect average client trajectory — your results may vary.
+          {t("results.footnote")}
         </p>
       </div>
     </section>

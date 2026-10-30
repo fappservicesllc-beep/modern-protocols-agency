@@ -1,23 +1,13 @@
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import type { TranslationKey } from "@/lib/translations";
 
-const faqs = [
-  {
-    q: "How is the investment structured — and how do I know it's worth it?",
-    a: "Engagements start at $15K for the 90-day protocol and scale based on scope. The math is simple: if a single new high-ticket client covers half the investment, the protocol pays for itself in the first 60 days. We don't take on a brand unless we see a clear path to 3–5× return inside twelve months — and we tell you on the strategy call whether you're a fit.",
-  },
-  {
-    q: "What time commitment do you need from me?",
-    a: "Plan on four focused hours per week — one 60-minute strategy call, two async reviews, and ~90 minutes of feedback windows. We're built to extend your team, not consume your calendar. Founders who try to give us less get less; founders who lean in for ninety days get the compounding outcome.",
-  },
-  {
-    q: "Does this work for my niche / industry?",
-    a: "The 90-Day Protocol is industry-agnostic by design — the framework is what compounds, the execution is bespoke. We've shipped it for PR, bridal couture, and editorial lifestyle brands in the last year alone. On the strategy call we'll be honest if your category isn't where we add the most leverage and refer you to someone who is.",
-  },
-  {
-    q: "What kind of ROI should I expect — and how fast?",
-    a: "Most clients see measurable lift inside 30 days (better positioning → better leads), meaningful revenue movement by day 60, and compounding by day 90. Average trajectory across the roster: 2–4× pipeline within two quarters. We're a growth investment, not a deliverables vendor — if you treat us like the latter, you'll get the latter's ROI.",
-  },
+const faqs: { qKey: TranslationKey; aKey: TranslationKey }[] = [
+  { qKey: "faq.1.q", aKey: "faq.1.a" },
+  { qKey: "faq.2.q", aKey: "faq.2.a" },
+  { qKey: "faq.3.q", aKey: "faq.3.a" },
+  { qKey: "faq.4.q", aKey: "faq.4.a" },
 ];
 
 function Item({
@@ -69,6 +59,7 @@ function Item({
 }
 
 export function Faq() {
+  const { t } = useI18n();
   const [open, setOpen] = useState<number | null>(0);
 
   return (
@@ -82,7 +73,7 @@ export function Faq() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="h-px w-12 bg-gold/50" />
             <span className="text-[11px] tracking-[0.5em] uppercase text-gold font-mono">
-              06 / Common Questions
+              {t("faq.label")}
             </span>
             <div className="h-px w-12 bg-gold/50" />
           </div>
@@ -90,8 +81,7 @@ export function Faq() {
             className="font-display text-4xl md:text-5xl leading-[1.05] tracking-tight"
             data-testid="text-faq-headline"
           >
-            What founders <span className="gold-text italic">actually ask</span>{" "}
-            before signing.
+            {t("faq.headline.pre")}<span className="gold-text italic">{t("faq.headline.emphasis")}</span>{t("faq.headline.post")}
           </h2>
         </div>
 
@@ -100,8 +90,8 @@ export function Faq() {
             <Item
               key={i}
               i={i}
-              q={f.q}
-              a={f.a}
+              q={t(f.qKey)}
+              a={t(f.aKey)}
               open={open === i}
               onToggle={() => setOpen(open === i ? null : i)}
             />
@@ -111,14 +101,14 @@ export function Faq() {
         {/* CTA */}
         <div className="max-w-3xl mx-auto mt-12 text-center reveal">
           <p className="text-muted-foreground mb-5">
-            Still have questions? The strategy call answers them all.
+            {t("faq.followup")}
           </p>
           <a
             href="#contact"
             className="inline-flex items-center gap-3 px-7 py-4 text-xs tracking-[0.25em] uppercase text-primary-foreground bg-gold hover:bg-gold-bright transition-all rounded-sm font-medium shadow-[0_10px_30px_-10px_rgba(201,169,97,0.5)] hover:-translate-y-0.5"
             data-testid="button-faq-cta"
           >
-            Book 30-Min Strategy Session
+            {t("faq.cta")}
           </a>
         </div>
       </div>

@@ -1,7 +1,9 @@
 import { ArrowRight, Calendar, ShieldCheck } from "lucide-react";
 import { DashboardMock } from "./dashboard-mock";
+import { useI18n } from "@/lib/i18n";
 
 export function Hero() {
+  const { t } = useI18n();
   return (
     <section
       id="top"
@@ -23,7 +25,7 @@ export function Hero() {
             >
               <span className="live-dot" />
               <span className="text-[11px] tracking-[0.4em] uppercase text-gold font-mono">
-                For Founders Scaling Past $50K/mo
+                {t("hero.eyebrow")}
               </span>
             </div>
 
@@ -33,11 +35,15 @@ export function Hero() {
               style={{ animationDelay: "250ms", animationFillMode: "forwards" }}
               data-testid="text-hero-headline"
             >
-              The growth protocol
+              {t("hero.headline.line1")}
               <br />
-              <span className="gold-text italic">elite operators</span>
-              <br />
-              run on.
+              <span className="gold-text italic">{t("hero.headline.emphasis")}</span>
+              {t("hero.headline.line3") && (
+                <>
+                  <br />
+                  {t("hero.headline.line3")}
+                </>
+              )}
             </h1>
 
             {/* Subheadline */}
@@ -46,10 +52,9 @@ export function Hero() {
               style={{ animationDelay: "450ms", animationFillMode: "forwards" }}
               data-testid="text-hero-sub"
             >
-              We engineer the websites, brand systems, and AI-driven content
-              engines that move category leaders from{" "}
-              <span className="text-foreground">six to seven figures</span> — and
-              past it. By invitation, for a select roster.
+              {t("hero.sub.pre")}
+              <span className="text-foreground">{t("hero.sub.emphasis")}</span>
+              {t("hero.sub.post")}
             </p>
 
             {/* CTAs */}
@@ -63,7 +68,7 @@ export function Hero() {
                 data-testid="button-hero-primary"
               >
                 <Calendar className="h-4 w-4" />
-                Book 30-Min Strategy Session
+                {t("hero.cta.primary")}
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </a>
               <a
@@ -71,10 +76,30 @@ export function Hero() {
                 className="group inline-flex items-center gap-3 px-7 py-4 text-xs tracking-[0.25em] uppercase text-foreground border border-gold/30 hover:border-gold/70 hover:bg-gold/5 transition-all rounded-sm font-medium"
                 data-testid="button-hero-secondary"
               >
-                Request Free Growth Audit
+                {t("hero.cta.secondary")}
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
+
+            {/* Social Proof pill */}
+            <a
+              href="#newsletter"
+              className="group inline-flex flex-wrap items-center gap-x-3 gap-y-1.5 max-w-xl mb-8 pl-4 pr-3 py-2.5 rounded-full bg-background/60 backdrop-blur-md border border-gold/30 hover:border-gold/60 hover:bg-gold/[0.06] transition-all shadow-[0_8px_24px_-14px_rgba(201,169,97,0.5)] animate-fade-up opacity-0"
+              style={{ animationDelay: "750ms", animationFillMode: "forwards" }}
+              data-testid="badge-social-proof"
+            >
+              <span className="relative flex h-2 w-2 flex-shrink-0">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-gold opacity-70 animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-gold" />
+              </span>
+              <span className="text-xs sm:text-sm text-muted-foreground leading-none">
+                {t("hero.social.text")}
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-gold font-medium leading-none whitespace-nowrap">
+                {t("hero.social.cta")}
+                <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+              </span>
+            </a>
 
             {/* Trust Bar */}
             <div
@@ -87,17 +112,16 @@ export function Hero() {
                   <ShieldCheck className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-foreground/90 italic leading-relaxed mb-2">
-                      "They didn't sell us a website. They rebuilt how prospects
-                      perceive our brand. The inbound speaks for itself."
+                      {t("hero.trust.quote")}
                     </p>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] tracking-[0.2em] uppercase font-mono text-muted-foreground">
-                      <span className="text-gold/80">— Erwin P., Founder</span>
+                      <span className="text-gold/80">{t("hero.trust.author")}</span>
                       <span className="text-muted-foreground/40">·</span>
-                      <span>No-commitment</span>
+                      <span>{t("hero.trust.tag1")}</span>
                       <span className="text-muted-foreground/40">·</span>
-                      <span>30 min</span>
+                      <span>{t("hero.trust.tag2")}</span>
                       <span className="text-muted-foreground/40">·</span>
-                      <span>NDA-friendly</span>
+                      <span>{t("hero.trust.tag3")}</span>
                     </div>
                   </div>
                 </div>

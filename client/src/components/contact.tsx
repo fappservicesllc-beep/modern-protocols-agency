@@ -4,10 +4,33 @@ import { useMutation } from "@tanstack/react-query";
 import { insertInquirySchema, type InsertInquiry } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { toast } from "@/components/ui/toaster";
-import { Mail, MapPin, Clock, ArrowRight } from "lucide-react";
+import { MessageSquare, MapPin, Clock, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n";
+import { trackPixel } from "@/lib/pixel";
+import type { TranslationKey } from "@/lib/translations";
 
-const SERVICES = [
+const SERVICE_KEYS: TranslationKey[] = [
+  "contact.service.1",
+  "contact.service.2",
+  "contact.service.3",
+  "contact.service.4",
+  "contact.service.5",
+  "contact.service.6",
+  "contact.service.7",
+  "contact.service.8",
+];
+
+const BUDGET_KEYS: TranslationKey[] = [
+  "contact.budget.1",
+  "contact.budget.2",
+  "contact.budget.3",
+  "contact.budget.4",
+  "contact.budget.5",
+];
+
+// Canonical values sent to the backend/DB (English) — labels come from t().
+const SERVICE_VALUES = [
   "Website Creation",
   "Brand Elevation",
   "Sales & Traffic Growth",
@@ -18,7 +41,7 @@ const SERVICES = [
   "Full Protocol (multiple)",
 ];
 
-const BUDGETS = [
+const BUDGET_VALUES = [
   "Under $5k",
   "$5k – $15k",
   "$15k – $30k",
@@ -27,6 +50,7 @@ const BUDGETS = [
 ];
 
 export function Contact() {
+  const { t } = useI18n();
   const form = useForm<InsertInquiry>({
     resolver: zodResolver(insertInquirySchema),
     defaultValues: {
@@ -48,18 +72,27 @@ export function Contact() {
         method: "POST",
         body: JSON.stringify(data),
       }),
-    onSuccess: () => {
+    onSuccess: (_res, variables) => {
+      // Meta Pixel: strategy-session request => high-intent Lead + Contact
+      trackPixel("Lead", {
+        content_name: "Strategy Session Request",
+        content_category: variables?.service || "Unspecified",
+        source: "contact",
+      });
+      trackPixel("Contact", {
+        content_name: "Strategy Session Request",
+      });
       toast({
-        title: "Inquiry received.",
-        description: "We'll respond within one business day.",
+        title: t("contact.toast.success.title"),
+        description: t("contact.toast.success.desc"),
         variant: "success",
       });
       reset();
     },
     onError: () => {
       toast({
-        title: "Something went wrong.",
-        description: "Please try again or email us directly.",
+        title: t("contact.toast.error.title"),
+        description: t("contact.toast.error.desc"),
         variant: "error",
       });
     },
@@ -82,48 +115,44 @@ export function Contact() {
           <div className="lg:col-span-5 reveal">
             <div className="flex items-center gap-3 mb-6">
               <span className="text-[10px] tracking-[0.4em] uppercase text-gold font-mono">
-                Contact
+                {t("contact.label")}
               </span>
               <div className="h-px w-12 bg-gold/40" />
             </div>
             <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05] mb-6">
-              Book your <span className="gold-text italic">strategy session.</span>
+              {t("contact.headline.pre")}<span className="gold-text italic">{t("contact.headline.emphasis")}</span>
             </h2>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-8">
-              Tell us where you're at and what you're trying to unlock. If
-              you're a fit, we'll send a calendar link within one business
-              day. If you're not, we'll tell you that too — and point you
-              somewhere better.
+              {t("contact.intro")}
             </p>
 
             {/* Mini trust strip */}
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-12 text-[10px] tracking-[0.25em] uppercase font-mono text-muted-foreground">
               <span className="flex items-center gap-2">
                 <span className="live-dot" />
-                <span className="text-gold/80">Accepting Q3/Q4</span>
+                <span className="text-gold/80">{t("contact.trust.accepting")}</span>
               </span>
               <span className="text-muted-foreground/40">·</span>
-              <span>No-commitment</span>
+              <span>{t("contact.trust.tag1")}</span>
               <span className="text-muted-foreground/40">·</span>
-              <span>NDA-friendly</span>
+              <span>{t("contact.trust.tag2")}</span>
             </div>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-sm border border-gold/30 flex items-center justify-center shrink-0">
-                  <Mail className="h-4 w-4 text-gold" />
+                  <MessageSquare className="h-4 w-4 text-gold" />
                 </div>
                 <div>
                   <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-1">
-                    Email
+                    {t("contact.info.email")}
                   </div>
-                  <a
-                    href="mailto:hello@themodernprotocols.com"
-                    className="text-foreground hover:text-gold transition-colors"
-                    data-testid="link-email"
-                  >
-                    hello@themodernprotocols.com
-                  </a>
+                  <div className="text-foreground" data-testid="text-contact-method">
+                    {t("contact.info.email.value")}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed max-w-xs">
+                    {t("contact.info.email.note")}
+                  </p>
                 </div>
               </div>
 
@@ -133,10 +162,10 @@ export function Contact() {
                 </div>
                 <div>
                   <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-1">
-                    Locations
+                    {t("contact.info.locations")}
                   </div>
                   <div className="text-foreground">
-                    Remote — Europe, USA, LATAM
+                    {t("contact.info.locations.value")}
                   </div>
                 </div>
               </div>
@@ -147,9 +176,9 @@ export function Contact() {
                 </div>
                 <div>
                   <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-1">
-                    Response Time
+                    {t("contact.info.response")}
                   </div>
-                  <div className="text-foreground">Within 1 business day</div>
+                  <div className="text-foreground">{t("contact.info.response.value")}</div>
                 </div>
               </div>
             </div>
@@ -165,12 +194,12 @@ export function Contact() {
               <div className="grid sm:grid-cols-2 gap-5 mb-5">
                 <div>
                   <label className="block text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-2">
-                    Your Name
+                    {t("contact.form.name")}
                   </label>
                   <input
                     {...register("name")}
                     type="text"
-                    placeholder="Jane Doe"
+                    placeholder={t("contact.form.name.placeholder")}
                     className={cn(inputCls, errors.name && "border-destructive/60")}
                     data-testid="input-name"
                   />
@@ -182,12 +211,12 @@ export function Contact() {
                 </div>
                 <div>
                   <label className="block text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-2">
-                    Email
+                    {t("contact.form.email")}
                   </label>
                   <input
                     {...register("email")}
                     type="email"
-                    placeholder="you@brand.com"
+                    placeholder={t("contact.form.email.placeholder")}
                     className={cn(inputCls, errors.email && "border-destructive/60")}
                     data-testid="input-email"
                   />
@@ -201,12 +230,12 @@ export function Contact() {
 
               <div className="mb-5">
                 <label className="block text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-2">
-                  Brand / Company
+                  {t("contact.form.brand")}
                 </label>
                 <input
                   {...register("brand")}
                   type="text"
-                  placeholder="The name of your brand"
+                  placeholder={t("contact.form.brand.placeholder")}
                   className={cn(inputCls, errors.brand && "border-destructive/60")}
                   data-testid="input-brand"
                 />
@@ -220,17 +249,17 @@ export function Contact() {
               <div className="grid sm:grid-cols-2 gap-5 mb-5">
                 <div>
                   <label className="block text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-2">
-                    Service Interest
+                    {t("contact.form.service")}
                   </label>
                   <select
                     {...register("service")}
                     className={cn(inputCls, errors.service && "border-destructive/60")}
                     data-testid="select-service"
                   >
-                    <option value="">Select a service…</option>
-                    {SERVICES.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
+                    <option value="">{t("contact.form.service.placeholder")}</option>
+                    {SERVICE_VALUES.map((val, idx) => (
+                      <option key={val} value={val}>
+                        {t(SERVICE_KEYS[idx])}
                       </option>
                     ))}
                   </select>
@@ -242,17 +271,17 @@ export function Contact() {
                 </div>
                 <div>
                   <label className="block text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-2">
-                    Budget
+                    {t("contact.form.budget")}
                   </label>
                   <select
                     {...register("budget")}
                     className={cn(inputCls, errors.budget && "border-destructive/60")}
                     data-testid="select-budget"
                   >
-                    <option value="">Select a range…</option>
-                    {BUDGETS.map((b) => (
-                      <option key={b} value={b}>
-                        {b}
+                    <option value="">{t("contact.form.budget.placeholder")}</option>
+                    {BUDGET_VALUES.map((val, idx) => (
+                      <option key={val} value={val}>
+                        {t(BUDGET_KEYS[idx])}
                       </option>
                     ))}
                   </select>
@@ -266,12 +295,12 @@ export function Contact() {
 
               <div className="mb-6">
                 <label className="block text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-2">
-                  What would you like to unlock?
+                  {t("contact.form.message")}
                 </label>
                 <textarea
                   {...register("message")}
                   rows={5}
-                  placeholder="Tell us about your brand, goals, and timeline…"
+                  placeholder={t("contact.form.message.placeholder")}
                   className={cn(inputCls, "resize-none", errors.message && "border-destructive/60")}
                   data-testid="textarea-message"
                 />
@@ -288,7 +317,7 @@ export function Contact() {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 text-xs tracking-[0.25em] uppercase text-primary-foreground bg-gold hover:bg-gold-bright disabled:opacity-60 disabled:cursor-not-allowed transition-colors rounded-sm font-medium"
                 data-testid="button-submit-inquiry"
               >
-                {mutation.isPending ? "Sending…" : "Submit Inquiry"}
+                {mutation.isPending ? t("contact.form.sending") : t("contact.form.submit")}
                 <ArrowRight className="h-4 w-4" />
               </button>
             </form>
